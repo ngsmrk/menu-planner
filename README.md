@@ -27,6 +27,20 @@ This project uses dotenv for environment variable management. Required variables
 - `GOOGLE_API_KEY`: Your Google API key for AI services
 - `NEXT_PUBLIC_APP_NAME`: The application name displayed in the UI
 
+## 
+
+To view the GenKit flows run
+
+```bash
+npx genkit start -- npx tsx --watch src/app/genkit.ts
+```
+
+NOTE: Make sure you have isntalled the GenKit CLI first by running
+
+```bash
+npm i --save-dev genkit-cli tsx
+```
+
 ## Testing
 
 Run the test suite with:
