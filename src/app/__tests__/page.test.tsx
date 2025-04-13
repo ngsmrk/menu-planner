@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import Home from '../page'
 
 // Mock next/image
@@ -10,6 +11,7 @@ jest.mock('next/image', () => ({
   },
 }))
 
+// Test suite for the Home page component
 describe('Home Page', () => {
   it('renders the Next.js logo', () => {
     render(<Home />)
