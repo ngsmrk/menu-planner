@@ -1,47 +1,56 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Home from '../page'
 
-// Mock next/image
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} alt={props.alt} />
-  },
+// Mock environment variables
+beforeEach(() => {
+  process.env.NEXT_PUBLIC_APP_NAME = 'Test App';
+})
+
+// Mock the menuSuggestionFlow function
+jest.mock('../genkit', () => ({
+  menuSuggestionFlow: jest.fn((theme) => Promise.resolve(`Test App suggests for "${theme}" theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)} Delight`))
 }))
 
-// Test suite for the Home page component
 describe('Home Page', () => {
-  it('renders the Next.js logo', () => {
+  it('renders the app name from environment variable', () => {
     render(<Home />)
-    const logo = screen.getByAltText('Next.js logo')
-    expect(logo).toBeInTheDocument()
-  })
-
-  it('renders the "Get started" text', () => {
-    render(<Home />)
-    const getStartedText = screen.getByText(/Get started by editing/i)
-    expect(getStartedText).toBeInTheDocument()
-  })
-
-  it('renders both main action buttons', () => {
-    render(<Home />)
-    const deployButton = screen.getByText('Deploy now')
-    const docsButton = screen.getByText('Read our docs')
     
-    expect(deployButton).toBeInTheDocument()
-    expect(docsButton).toBeInTheDocument()
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading).toHaveTextContent('Test App');
   })
 
-  it('renders all footer links', () => {
+  it('renders the form with input and button', () => {
     render(<Home />)
-    const learnLink = screen.getByText('Learn')
-    const examplesLink = screen.getByText('Examples')
-    const nextjsLink = screen.getByText('Go to nextjs.org →')
     
-    expect(learnLink).toBeInTheDocument()
-    expect(examplesLink).toBeInTheDocument()
-    expect(nextjsLink).toBeInTheDocument()
+    const label = screen.getByText(/Suggest a menu item for a restaurant with this theme:/i)
+    const input = screen.getByLabelText(/Suggest a menu item for a restaurant with this theme:/i)
+    const button = screen.getByRole('button', { name: /Generate/i })
+    
+    expect(label).toBeInTheDocument()
+    expect(input).toBeInTheDocument()
+    expect(button).toBeInTheDocument()
+  })
+
+  it('shows empty state initially', () => {
+    render(<Home />)
+    const preElement = screen.getByText('', { selector: 'pre' })
+    expect(preElement).toBeInTheDocument()
+    expect(preElement).toHaveTextContent('')
+  })
+
+  it('generates menu item when form is submitted', async () => {
+    render(<Home />)
+    
+    const input = screen.getByLabelText(/Suggest a menu item for a restaurant with this theme:/i)
+    const button = screen.getByRole('button', { name: /Generate/i })
+    
+    fireEvent.change(input, { target: { value: 'italian' } })
+    fireEvent.click(button)
+    
+    await waitFor(() => {
+      const result = screen.getByText(/Test App suggests for "italian" theme: Italian Delight/i)
+      expect(result).toBeInTheDocument()
+    })
   })
 }) 
