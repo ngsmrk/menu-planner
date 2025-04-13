@@ -2,10 +2,11 @@
 
 import { menuSuggestionFlow } from './genkit';
 import { useState } from 'react';
+import { publicEnvVars } from '../utils/env';
 
 export default function Home() {
   const [menuItem, setMenuItem] = useState<string>('');
-  const appName = process.env.NEXT_PUBLIC_APP_NAME || 'Menu Generator';
+  const appName = publicEnvVars.APP_NAME;
 
   async function getMenuItem(formData: FormData) {
     const theme = formData.get('theme')?.toString() ?? '';

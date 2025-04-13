@@ -2,11 +2,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Home from '../page'
 
-// Mock environment variables
-beforeEach(() => {
-  process.env.NEXT_PUBLIC_APP_NAME = 'Test App';
-  process.env.GOOGLE_API_KEY = 'test-api-key';
-})
+// Mock the environment utilities
+jest.mock('../../utils/env', () => ({
+  publicEnvVars: {
+    APP_NAME: 'Test App',
+    API_KEY: 'test-api-key'
+  },
+  getEnvVar: (key: string, defaultValue = '') => {
+    const envVars: Record<string, string> = {
+      'GOOGLE_API_KEY': 'test-google-api-key',
+      'NEXT_PUBLIC_APP_NAME': 'Test App'
+    };
+    return envVars[key] || defaultValue;
+  }
+}));
 
 // Mock the menuSuggestionFlow function
 jest.mock('../genkit', () => ({

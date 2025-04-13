@@ -2,12 +2,15 @@
 
 import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
 import { genkit, z } from "genkit";
+import { getEnvVar } from '../utils/env';
 
-// Get environment variables
-const googleApiKey = process.env.GOOGLE_API_KEY;
-const appName = process.env.NEXT_PUBLIC_APP_NAME || 'Menu Suggester';
+// Get environment variables with the utility
+const googleApiKey = getEnvVar('GOOGLE_API_KEY');
+const apiEndpoint = getEnvVar('API_ENDPOINT', 'https://api.example.com');
+const appName = getEnvVar('NEXT_PUBLIC_APP_NAME', 'Menu Suggester');
 
 console.log(`Google API Key is ${googleApiKey ? 'configured' : 'not configured'}`);
+console.log(`Using API endpoint: ${apiEndpoint}`);
 
 const ai = genkit({
   plugins: [googleAI({ apiKey: googleApiKey })],
