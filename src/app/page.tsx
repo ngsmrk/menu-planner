@@ -1,6 +1,6 @@
 'use client';
 
-import { menuSuggestionFlow } from './genkit';
+import { menuSuggestionFlowWithPrompt } from './genkit';
 import { useState } from 'react';
 import { publicEnvVars } from '../utils/env';
 
@@ -10,8 +10,8 @@ export default function Home() {
 
   async function getMenuItem(formData: FormData) {
     const theme = formData.get('theme')?.toString() ?? '';
-    const suggestion = await menuSuggestionFlow(theme);
-    setMenuItem(suggestion);
+    const suggestion = await menuSuggestionFlowWithPrompt(theme);
+    setMenuItem(suggestion.menu);
   }
 
   return (

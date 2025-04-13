@@ -17,6 +17,11 @@ const ai = genkit({
   model: gemini20Flash,
 });
 
+export const menuSuggestionFlowWithPrompt = async (restaurantTheme: string) => {
+  const menuPrompt = ai.prompt('themed-restaurant');
+  return (await menuPrompt({ theme: restaurantTheme })).output
+}
+
 export const menuSuggestionFlow = ai.defineFlow(
   {
     name: "menuSuggestionFlow",
