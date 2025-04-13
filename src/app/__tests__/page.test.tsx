@@ -5,6 +5,7 @@ import Home from '../page'
 // Mock environment variables
 beforeEach(() => {
   process.env.NEXT_PUBLIC_APP_NAME = 'Test App';
+  process.env.GOOGLE_API_KEY = 'test-api-key';
 })
 
 // Mock the menuSuggestionFlow function

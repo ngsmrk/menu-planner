@@ -7,5 +7,6 @@ declare namespace NodeJS {
     // Server-only variables
     API_SECRET?: string;
     API_ENDPOINT?: string;
+    GOOGLE_API_KEY?: string;
   }
 } 
